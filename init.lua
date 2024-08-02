@@ -190,6 +190,25 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- For pasting from windows when using wsl
+if vim.fn.has 'wsl' then
+  vim.g.clipboard = {
+    name = 'win_clipboard',
+    copy = {
+      ['+'] = 'clip.exe',
+      ['*'] = 'clip.exe',
+    },
+    paste = {
+      ['+'] = 'powershell.exe Get-Clipboard',
+      ['*'] = 'clip.exe Get-Clipboard',
+    },
+    cache_enable = 0,
+  }
+
+  vim.keymap.set({ 'n', 'v' }, 'y', '"+y', { noremap = true, silent = true })
+  vim.keymap.set({ 'n', 'v' }, 'p', '"+p', { noremap = true, silent = true })
+end
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
